@@ -13,6 +13,6 @@ public class Error
         Code = code;
     }
 
-    public static Error New(string title, string detail = "", string code = "")
+    public static Error New(string title, string? detail = null, string? code = null)
         => new(title, detail, code);
 }

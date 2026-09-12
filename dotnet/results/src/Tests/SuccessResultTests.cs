@@ -5,6 +5,7 @@ namespace Tests;
 public class SuccessResultTests
 {
     [Fact]
+    [Trait("Result", "Success")]
     public void GivenSuccessResult_WhenCalledWithNoArguments_ThenIsSuccessIsTrue()
     {
         Result result = Result.Success();
@@ -14,7 +15,8 @@ public class SuccessResultTests
     }
 
     [Fact]
-    public void GivenSuccessResult_WhenCalledWithMessage_ThenSuccessMessageIsSet()
+    [Trait("Result", "Success")]
+    public void GivenSuccessResult_WhenCalledWithSuccessMessage_ThenSuccessMessageIsSet()
     {
         Result result = Result.Success("Operation completed");
 
@@ -23,6 +25,7 @@ public class SuccessResultTests
     }
 
     [Fact]
+    [Trait("Result<TValue>", "Success")]
     public void GivenSuccessResult_WhenCalledWithGenericValue_ThenValueIsReturned()
     {
         Result<int> result = Result.Success(5);
@@ -32,7 +35,8 @@ public class SuccessResultTests
     }
 
     [Fact]
-    public void GivenSuccessResult_WhenCalledWithGenericValueAndMessage_ThenBothAreReturned()
+    [Trait("Result<TValue>", "Success")]
+    public void GivenSuccessResult_WhenCalledWithGenericValueAndSuccessMessage_ThenBothAreReturned()
     {
         Result<int> result = Result.Success(42, "The answer");
 

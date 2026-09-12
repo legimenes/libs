@@ -5,6 +5,7 @@ namespace Tests;
 public class ErrorTests
 {
     [Fact]
+    [Trait("Error", "New")]
     public void GivenNewError_WhenCalledWithAllArguments_ThenPropertiesAreSet()
     {
         Error error = Error.New("Title", "Detail", "CODE");
@@ -15,12 +16,13 @@ public class ErrorTests
     }
 
     [Fact]
-    public void GivenNewError_WhenCalledWithOnlyTitle_ThenDetailAndCodeAreEmpty()
+    [Trait("Error", "New")]
+    public void GivenNewError_WhenCalledWithOnlyTitle_ThenDetailAndCodeAreNull()
     {
         Error error = Error.New("Title only");
 
         Assert.Equal("Title only", error.Title);
-        Assert.Equal("", error.Detail);
-        Assert.Equal("", error.Code);
+        Assert.Null(error.Detail);
+        Assert.Null(error.Code);
     }
 }
