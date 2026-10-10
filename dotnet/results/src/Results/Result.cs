@@ -18,41 +18,47 @@ public class Result
         }
     }
 
-    protected internal Result(bool isSuccess, string? successMessage = null, List<Error>? errors = null)
+    public ResultType Type { get; }
+
+    private const ResultType DefaultSuccessResultType = ResultType.Ok;
+    private const ResultType DefaultFailureResultType = ResultType.UnprocessableContent;
+
+    protected internal Result(bool isSuccess, string? successMessage = null, List<Error>? errors = null, ResultType type = ResultType.Undefined)
     {
         IsSuccess = isSuccess;
         SuccessMessage = successMessage;
         _errors = errors;
+        Type = type;
     }
 
-    public static Result Success() => new(true);
+    public static Result Success(ResultType type = DefaultSuccessResultType) => new(true, type: type);
 
-    public static Result Success(string successMessage) => new(true, successMessage);
+    public static Result Success(string successMessage, ResultType type = DefaultSuccessResultType) => new(true, successMessage, type: type);
 
-    public static Result<TValue> Success<TValue>(TValue value) => new(value, true);
+    public static Result<TValue> Success<TValue>(TValue value, ResultType type = DefaultSuccessResultType) => new(value, true, type: type);
 
-    public static Result<TValue> Success<TValue>(TValue value, string successMessage) => new(value, true, successMessage);
+    public static Result<TValue> Success<TValue>(TValue value, string successMessage, ResultType type = DefaultSuccessResultType) => new(value, true, successMessage, type: type);
 
-    public static Result Failure() => new(false);
+    public static Result Failure(ResultType type = DefaultFailureResultType) => new(false, type: type);
 
-    public static Result Failure(Error error) => new(false, null, [error]);
+    public static Result Failure(Error error, ResultType type = DefaultFailureResultType) => new(false, null, [error], type: type);
 
-    public static Result Failure(List<Error> errors) => new(false, null, errors);
+    public static Result Failure(List<Error> errors, ResultType type = DefaultFailureResultType) => new(false, null, errors, type: type);
 
-    public static Result Failure(IDictionary<string, string[]> errors)
+    public static Result Failure(IDictionary<string, string[]> errors, ResultType type = DefaultFailureResultType)
     {
         List<Error>? errorList = ConvertDictionaryToErrorList(errors);
-        return new(false, null, errorList);
+        return new(false, null, errorList, type: type);
     }
 
-    public static Result<TValue> Failure<TValue>(Error error) => new(default, false, null, [error]);
+    public static Result<TValue> Failure<TValue>(Error error, ResultType type = DefaultFailureResultType) => new(default, false, null, [error], type: type);
 
-    public static Result<TValue> Failure<TValue>(List<Error> errors) => new(default, false, null, errors);
+    public static Result<TValue> Failure<TValue>(List<Error> errors, ResultType type = DefaultFailureResultType) => new(default, false, null, errors, type: type);
 
-    public static Result<TValue> Failure<TValue>(IDictionary<string, string[]> errors)
+    public static Result<TValue> Failure<TValue>(IDictionary<string, string[]> errors, ResultType type = DefaultFailureResultType)
     {
         List<Error>? errorList = ConvertDictionaryToErrorList(errors);
-        return new(default, false, null, errorList);
+        return new(default, false, null, errorList, type: type);
     }
 
     private static List<Error> ConvertDictionaryToErrorList(IDictionary<string, string[]> errors)
@@ -68,15 +74,4 @@ public class Result
         }
         return errorList;
     }
-}
-
-public class Result<TValue> : Result
-{
-    private readonly TValue? _value;
-
-    public TValue? Value => _value;
-
-    protected internal Result(TValue? value, bool isSuccess, string? successMessage = null, List<Error>? errors = null)
-        : base(isSuccess, successMessage, errors)
-        => _value = value;
 }
